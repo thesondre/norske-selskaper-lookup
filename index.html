@@ -38,19 +38,11 @@
     </form>
     
     <div id="selskaper">
-        <div>
-            <h1>Namn: ${enheit.navn}</h1>
-            <p><strong>Organisasjonsnummer:</strong>${enheit.organisasjonsnummer}</p>
-            <p><strong>Kommune:</strong>${enheit.forretningsadresse.kommune}</p>
-            <p><strong>Adresse:</strong> ${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
-            <p><strong>Målform:</strong> ${enheit.maalform}</p>
-            <p class="detalje"><strong>Detalje:</strong> <br>${detalj}</p>
-            </div>
     </div>
 
     <footer>
         <p>Utvikla av Sondre kazuya Matsui-li</p>
-        <p>Data frå <a href="https://brreg.no">brønnesundregisteret</a></p>
+        <p>Data frå <a href="https://brreg.no">brønnøysundregisteret</a></p>
     </footer>
    <script>
     
@@ -86,14 +78,11 @@
                 for(var detalje of enheit.aktivitet){
                 detalj += detalje
                 }
-                if (enheit.forretningsadresse.kommune != "undefined"){
-                    var kommune = enheit.forretningsadresse.kommune
-                }
                 selskaper.innerHTML += `<h1>Namn: ${enheit.navn}</h1>
             <p><strong>Organisasjonsnummer:</strong></p>
             <p>${enheit.organisasjonsnummer}</p>
             <p><strong>Kommune:</strong></p>
-            <p>${kommune}</p>
+            <p>${enheit.forretningsadresse.kommune}</p>
             <p><strong>Adresse:</strong></p>
             <p>${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
             <p><strong>Målform:</strong>${enheit.maalform}</p>

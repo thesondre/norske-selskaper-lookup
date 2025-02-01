@@ -4,11 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            padding: 0%;
+            margin: 0%;
+        }
+
+        input {
+            align-self: center;
+            border-radius: 6px;
+        }
+        #selskaper{
+            display: flex;
+            justify-content: center ;
+        }
+        .detalje {
+            font-size: 1rem;
+        }
+    </style>
 </head>
 <body>
     
     <input type="text" id="sok" placeholder="Søk etter selskap">
-    <div id="selskaper"></div>
+    <div id="selskaper">
+        <div><h1>Namn: ${enheit.navn}</h1>
+                    <p><strong>Organisasjonsnummer:</strong>${enheit.organisasjonsnummer}</p>
+                    <p><strong>Kommune:</strong>${enheit.forretningsadresse.kommune}</p>
+                    <p><strong>Adresse:</strong> ${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
+                    <p><strong>Målform:</strong> ${enheit.maalform}</p>
+                    <p class="detalje"><strong>Detalje:</strong> ${detalj}</p>
+                    </div><hr>`
+    </div>
+
+    <footer>
+        <p>Utvikla av Sondre kazuya Matsui-li</p>
+        <p>API frå <a href="https://brreg.no">brønnesundregisteret</a></p>
+    </footer>
    <script>
     
 
@@ -39,12 +70,12 @@
                     <p>Kommune:${enheit.forretningsadresse.kommune}</p>
                     <p>Adresse: ${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
                     <p>Målform: ${enheit.maalform}</p>
-                    <p>Detalje: ${detalj}</p>
+                    <p class="detalje">Detalje: ${detalj}</p>
                     </div><hr>`
             }
         })
         .catch(error => {
-            console.log(error)
+            console.error(error)
         })
     }
 

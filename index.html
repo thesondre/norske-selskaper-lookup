@@ -6,13 +6,18 @@
     <title>Document</title>
     <style>
         body {
+            display: flex;
             padding: 0%;
             margin: 0%;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
         input {
             align-self: center;
             border-radius: 6px;
+            margin-top: 50px;
         }
         #selskaper{
             display: flex;
@@ -27,7 +32,11 @@
 </head>
 <body>
     
-    <input type="text" id="sok" placeholder="Søk etter selskap">
+    <form action="">
+        <input type="text" id="sok" placeholder="Søk etter selskap">
+        <input type="submit">
+    </form>
+    
     <div id="selskaper">
         <div>
             <h1>Namn: ${enheit.navn}</h1>
@@ -35,22 +44,32 @@
             <p><strong>Kommune:</strong>${enheit.forretningsadresse.kommune}</p>
             <p><strong>Adresse:</strong> ${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
             <p><strong>Målform:</strong> ${enheit.maalform}</p>
-            <p class="detalje"><strong>Detalje:</strong> <br> ${detalj}</p>
+            <p class="detalje"><strong>Detalje:</strong> <br>${detalj}</p>
             </div>
     </div>
 
     <footer>
         <p>Utvikla av Sondre kazuya Matsui-li</p>
-        <p>API frå <a href="https://brreg.no">brønnesundregisteret</a></p>
+        <p>Data frå <a href="https://brreg.no">brønnesundregisteret</a></p>
     </footer>
    <script>
     
+    const regexOrgNum = /^[0-9]{9}$/;
 
-    sok.addEventListener("input", get)
+    document.addEventListener("submit", get)
 
+    var index
     async function get(evt){
         evt.preventDefault()
-        fetch(`https://data.brreg.no/enhetsregisteret/api/enheter?navn=${sok.value}`)
+        if(sok.value.match(regexOrgNum)){
+            index = `?organisasjonsnummer=${validerOrganisasjonsnummer(sok.value)}`
+            console.log("Orgnummer")
+        }
+        else{
+            index = `?navn=${sok.value}`
+            console.log("Namn")
+        }
+        await fetch(`https://data.brreg.no/enhetsregisteret/api/enheter${index}`)
         .then(response => {
             if(response.ok) {
             return response.json()
@@ -67,11 +86,14 @@
                 for(var detalje of enheit.aktivitet){
                 detalj += detalje
                 }
+                if (enheit.forretningsadresse.kommune != "undefined"){
+                    var kommune = enheit.forretningsadresse.kommune
+                }
                 selskaper.innerHTML += `<h1>Namn: ${enheit.navn}</h1>
             <p><strong>Organisasjonsnummer:</strong></p>
             <p>${enheit.organisasjonsnummer}</p>
             <p><strong>Kommune:</strong></p>
-            <p>${enheit.forretningsadresse.kommune}</p>
+            <p>${kommune}</p>
             <p><strong>Adresse:</strong></p>
             <p>${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
             <p><strong>Målform:</strong>${enheit.maalform}</p>
@@ -83,6 +105,28 @@
         .catch(error => {
             console.error(error)
         })
+    }
+    //Validerer organistasjonsnummeret
+    //Les: https://www.brreg.no/om-oss/registrene-vare/om-enhetsregisteret/organisasjonsnummeret/
+    function validerOrganisasjonsnummer(nummer){ 
+        orgnummer = nummer.split("")
+        vekttall = [3, 2, 7, 6, 5, 4, 3, 2]
+        var sum=0
+        for (var vekt in vekttall){
+            vektnummer = Number(orgnummer[vekt])
+            sum += vektnummer*vekttall[vekt]
+        }
+        kontrollsiffer = 11-sum%11
+        if (kontrollsiffer === 11){kontrollsiffer =0}
+        console.log(kontrollsiffer)
+        if (Number(orgnummer[8])=== kontrollsiffer){
+            console.log("Gyldig orgnummer")
+            return Number(nummer)
+        } else {
+            console.log("Ikkje gyldig orgnummer")
+            return
+        }
+
     }
 
     

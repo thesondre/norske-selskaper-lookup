@@ -17,6 +17,8 @@
         #selskaper{
             display: flex;
             justify-content: center ;
+            align-items: center;
+            flex-direction: column;
         }
         .detalje {
             font-size: 1rem;
@@ -27,13 +29,14 @@
     
     <input type="text" id="sok" placeholder="Søk etter selskap">
     <div id="selskaper">
-        <div><h1>Namn: ${enheit.navn}</h1>
-                    <p><strong>Organisasjonsnummer:</strong>${enheit.organisasjonsnummer}</p>
-                    <p><strong>Kommune:</strong>${enheit.forretningsadresse.kommune}</p>
-                    <p><strong>Adresse:</strong> ${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
-                    <p><strong>Målform:</strong> ${enheit.maalform}</p>
-                    <p class="detalje"><strong>Detalje:</strong> ${detalj}</p>
-                    </div><hr>`
+        <div>
+            <h1>Namn: ${enheit.navn}</h1>
+            <p><strong>Organisasjonsnummer:</strong>${enheit.organisasjonsnummer}</p>
+            <p><strong>Kommune:</strong>${enheit.forretningsadresse.kommune}</p>
+            <p><strong>Adresse:</strong> ${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
+            <p><strong>Målform:</strong> ${enheit.maalform}</p>
+            <p class="detalje"><strong>Detalje:</strong> <br> ${detalj}</p>
+            </div>
     </div>
 
     <footer>
@@ -57,7 +60,6 @@
         .then(data => {
             const enheter = data._embedded.enheter
             const selskaper = document.getElementById('selskaper')
-            console.log(enheter)
             var detalj = ""
             
             selskaper.innerHTML = ""
@@ -65,13 +67,17 @@
                 for(var detalje of enheit.aktivitet){
                 detalj += detalje
                 }
-                selskaper.innerHTML += `<div><h1>Namn: ${enheit.navn}<h1>
-                    <p>Organisasjonsnummer:${enheit.organisasjonsnummer}</p>
-                    <p>Kommune:${enheit.forretningsadresse.kommune}</p>
-                    <p>Adresse: ${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
-                    <p>Målform: ${enheit.maalform}</p>
-                    <p class="detalje">Detalje: ${detalj}</p>
-                    </div><hr>`
+                selskaper.innerHTML += `<h1>Namn: ${enheit.navn}</h1>
+            <p><strong>Organisasjonsnummer:</strong></p>
+            <p>${enheit.organisasjonsnummer}</p>
+            <p><strong>Kommune:</strong></p>
+            <p>${enheit.forretningsadresse.kommune}</p>
+            <p><strong>Adresse:</strong></p>
+            <p>${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
+            <p><strong>Målform:</strong>${enheit.maalform}</p>
+            <p class="detalje"><strong>Detalje:</strong></p>
+            <p>${detalj}</p>
+            </div>`
             }
         })
         .catch(error => {

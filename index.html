@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <input type="text" id="sok" placeholder="Søk etter selskap">
+    <div id="selskaper"></div>
+   <script>
+    
+
+    sok.addEventListener("input", get)
+
+    async function get(evt){
+        evt.preventDefault()
+        fetch(`https://data.brreg.no/enhetsregisteret/api/enheter?navn=${sok.value}`)
+        .then(response => {
+            if(response.ok) {
+            return response.json()
+        } else {
+            throw new Error('Noe gikk galt')
+        }})
+        .then(data => {
+            const enheter = data._embedded.enheter
+            const selskaper = document.getElementById('selskaper')
+            console.log(enheter)
+            var detalj = ""
+            
+            selskaper.innerHTML = ""
+            for (var enheit of enheter) {
+                for(var detalje of enheit.aktivitet){
+                detalj += detalje
+                }
+                selskaper.innerHTML += `<div><h1>Namn: ${enheit.navn}<h1>
+                    <p>Organisasjonsnummer:${enheit.organisasjonsnummer}</p>
+                    <p>Kommune:${enheit.forretningsadresse.kommune}</p>
+                    <p>Adresse: ${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
+                    <p>Målform: ${enheit.maalform}</p>
+                    <p>Detalje: ${detalj}</p>
+                    </div><hr>`
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    
+        
+   </script> 
+</body>
+</html>

@@ -34,7 +34,6 @@
     
     <form action="">
         <input type="text" id="sok" placeholder="Søk etter selskap">
-        <input type="submit">
     </form>
     
     <div id="selskaper">
@@ -48,7 +47,7 @@
     
     const regexOrgNum = /^[0-9]{9}$/;
 
-    document.addEventListener("submit", get)
+    document.addEventListener("input", get)
 
     var index
     async function get(evt){
@@ -78,13 +77,24 @@
                 for(var detalje of enheit.aktivitet){
                 detalj += detalje
                 }
+                function isDefined(){
+                    if (enheit.forretningsadresse != undefined){
+                        return true
+                    } 
+                }
+                const kommune = enheit.forretningsadresse?.kommune ?? enheit.postadresse?.kommune ?? "N/A";
+                const adresse = enheit.forretningsadresse?.adresse ?? enheit.postadresse?.adresse ?? "N/A";
+                const postnummer = enheit.forretningsadresse?.postnummer ?? enheit.postadresse?.postnummer ?? "N/A";
+                const poststed = enheit.forretningsadresse?.poststed ?? enheit.postadresse?.poststed ?? "N/A";
+                const land = enheit.forretningsadresse?.land ?? enheit.postadresse?.land ?? "N/A";
+                const landkode = enheit.forretningsadresse?.landkode ?? enheit.postadresse?.landkode ?? "N/A";
                 selskaper.innerHTML += `<h1>Namn: ${enheit.navn}</h1>
             <p><strong>Organisasjonsnummer:</strong></p>
             <p>${enheit.organisasjonsnummer}</p>
             <p><strong>Kommune:</strong></p>
-            <p>${enheit.forretningsadresse.kommune}</p>
+            <p>${kommune}</p>
             <p><strong>Adresse:</strong></p>
-            <p>${enheit.forretningsadresse.adresse} ${enheit.forretningsadresse.postnummer} ${enheit.forretningsadresse.poststed} ${enheit.forretningsadresse.land} ${enheit.forretningsadresse.landkode}</p>
+            <p>${adresse} ${postnummer} ${poststed} ${land} ${landkode}</p>
             <p><strong>Målform:</strong>${enheit.maalform}</p>
             <p class="detalje"><strong>Detalje:</strong></p>
             <p>${detalj}</p>
